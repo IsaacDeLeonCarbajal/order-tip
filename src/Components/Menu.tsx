@@ -1,23 +1,19 @@
-import type { Dispatch, SetStateAction } from "react";
-
 import type { MenuItem, Order } from "../Types/models";
-import { useOrder } from "../Hooks/useOrder";
 import { formatCurrency } from "../utils/numbers";
 
 type MenuProps = {
     menu: MenuItem[];
     order: Order;
-    setOrder: Dispatch<SetStateAction<Order>>;
+    onItemAdded: (item: MenuItem) => void;
+    onItemUpdated: (id: MenuItem['id'], amount: number) => void;
 };
 
-export default function Menu({ menu, order, setOrder }: MenuProps) {
-    const { addItemToOrder, updateQuantityBy } = useOrder(order, setOrder);
-
+export default function Menu({ menu, order, onItemAdded, onItemUpdated }: MenuProps) {
     const handleItemClicked = (item: MenuItem) => {
         if (Object.hasOwn(order, item.id))
-            updateQuantityBy(item.id, 1);
+            onItemUpdated(item.id, 1);
         else
-            addItemToOrder(item);
+            onItemAdded(item);
     }
 
     return (

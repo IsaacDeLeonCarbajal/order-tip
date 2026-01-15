@@ -1,17 +1,12 @@
-import type { Dispatch, SetStateAction } from "react";
-
-import type { Order as OrderType } from "../Types/models";
-import { useOrder } from "../Hooks/useOrder";
+import type { MenuItem, Order as OrderType } from "../Types/models";
 import { formatCurrency } from "../utils/numbers";
 
 type OrderProps = {
     order: OrderType;
-    setOrder: Dispatch<SetStateAction<OrderType>>;
+    onItemRemoved: (id: MenuItem['id']) => void;
 }
 
-export default function Order({ order, setOrder }: OrderProps) {
-    const { removeItemFromOrder } = useOrder(order, setOrder);
-
+export default function Order({ order, onItemRemoved }: OrderProps) {
     return (
         <>
             <h2 className="text-2xl font-bold mb-4">Orden</h2>
@@ -32,7 +27,7 @@ export default function Order({ order, setOrder }: OrderProps) {
                             {formatCurrency(item.price * item.quantity)}
                         </div>
 
-                        <span onClick={() => removeItemFromOrder(item.id)} className="flex items-center justify-center bg-red-400 hover:cursor-pointer rounded-full w-8 h-8">
+                        <span onClick={() => onItemRemoved(item.id)} className="flex items-center justify-center bg-red-400 hover:cursor-pointer rounded-full w-8 h-8">
                             X
                         </span>
                     </div>

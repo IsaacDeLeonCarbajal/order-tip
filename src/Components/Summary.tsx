@@ -1,18 +1,17 @@
-import type { Dispatch, SetStateAction } from "react";
 import { useMemo } from "react";
 
 import type { Order as OrderType } from "../Types/models";
-import { useOrder } from "../Hooks/useOrder";
 import { formatCurrency } from "../utils/numbers";
 
 type SummaryProps = {
     order: OrderType;
-    setOrder: Dispatch<SetStateAction<OrderType>>;
     tip: number;
 }
 
-export default function Summary({ order, setOrder, tip }: SummaryProps) {
-    const { orderSubtotal } = useOrder(order, setOrder);
+export default function Summary({ order, tip }: SummaryProps) {
+    const orderSubtotal = useMemo(() => {
+        return Object.values(order).reduce((prev, curr) => prev += (curr.price * curr.quantity), 0);
+    }, [order]);
 
     const tipTotal = useMemo(() => {
         return orderSubtotal * tip / 100;
